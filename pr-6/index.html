@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>El Derecho Escrito | Derecho administrativo y urbanismo</title>
+<meta name="description" content="Análisis de Derecho administrativo, urbanismo y jurisdicción contencioso-administrativa: conceptos, normativa, jurisprudencia y práctica procesal.">
+<link rel="canonical" href="https://elderechoescrito.es/">
+<meta name="robots" content="noindex, nofollow">
+<meta name="author" content="El Derecho Escrito">
+<meta name="theme-color" content="#2f6e68">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="El Derecho Escrito">
+<meta property="og:locale" content="es_ES">
+<meta property="og:url" content="https://elderechoescrito.es/">
+<meta property="og:title" content="El Derecho Escrito | Derecho administrativo y urbanismo">
+<meta property="og:description" content="Análisis de Derecho administrativo, urbanismo y jurisdicción contencioso-administrativa, con rigor y criterio propio.">
+<meta property="og:image" content="https://elderechoescrito.es/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="El Derecho Escrito — análisis de Derecho administrativo y urbanismo">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="El Derecho Escrito | Derecho administrativo">
+<meta name="twitter:description" content="Análisis de Derecho administrativo, urbanismo y jurisdicción contencioso-administrativa.">
+<meta name="twitter:image" content="https://elderechoescrito.es/og.png">
+
+<link rel="icon" href="./favicon.svg" type="image/svg+xml">
+<link rel="icon" href="./favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="./favicon-16.png" sizes="16x16" type="image/png">
+<link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<link rel="alternate" type="application/rss+xml" title="El Derecho Escrito — artículos" href="./feed.xml">
+<link rel="stylesheet" href="./css/styles.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://elderechoescrito.es/#website",
+      "url": "https://elderechoescrito.es/",
+      "name": "El Derecho Escrito",
+      "description": "Análisis de Derecho administrativo, urbanismo y jurisdicción contencioso-administrativa.",
+      "inLanguage": "es-ES",
+      "publisher": { "@id": "https://elderechoescrito.es/#publisher" },
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "https://elderechoescrito.es/articulos/?q={search_term_string}"
+        },
+        "query-input": "required name=search_term_string"
+      }
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://elderechoescrito.es/#publisher",
+      "name": "El Derecho Escrito",
+      "url": "https://elderechoescrito.es/",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://elderechoescrito.es/img/logo-512.png",
+        "width": 512,
+        "height": 512
+      }
+    },
+    {
+      "@type": "Blog",
+      "@id": "https://elderechoescrito.es/#blog",
+      "url": "https://elderechoescrito.es/",
+      "name": "El Derecho Escrito",
+      "description": "Conceptos, normativa, jurisprudencia y práctica procesal del Derecho público, explicados con rigor.",
+      "inLanguage": "es-ES",
+      "publisher": { "@id": "https://elderechoescrito.es/#publisher" }
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://elderechoescrito.es/#webpage",
+      "url": "https://elderechoescrito.es/",
+      "name": "El Derecho Escrito | Derecho administrativo y urbanismo",
+      "isPartOf": { "@id": "https://elderechoescrito.es/#website" },
+      "about": { "@id": "https://elderechoescrito.es/#blog" },
+      "inLanguage": "es-ES"
+    }
+  ]
+}
+</script>
+</head>
+<!-- La clase `inicio` es el GANCHO DE ALCANCE del rediseño de portada, no un
+     estilo en sí. Todas las reglas nuevas cuelgan de ella porque los componentes
+     que retoca los comparten otras páginas:
+
+       · .lista__titulo--destacado lo usa «Continúa leyendo» del artículo
+       · .entrada__meta lo usan las tarjetas del listado y la ficha del artículo
+       · .suscripcion--banda la usa el lateral del artículo
+
+     Sin el gancho, tocar cualquiera de los tres cambiaría articulos/ y las
+     páginas de artículo a la vez. Si algún día la portada deja de ser especial,
+     se quita la clase y se desprefijan las reglas de golpe. -->
+<body class="inicio">
+
+<a class="saltar" href="#contenido">Saltar al contenido</a>
+
+<header class="cabecera">
+  <div class="cabecera__interior">
+    <a class="marca" href="./">El Derecho Escrito</a>
+    <nav class="nav" aria-label="Navegación principal">
+      <a href="./articulos/">Artículos</a>
+      <a href="./sobre/">Acerca de</a>
+      <a href="./contacto/">Contacto</a>
+
+      <!-- Sin JS la lupa es un enlace al listado, que ya tiene su buscador.
+           Con JS, main.js la sustituye por un <button aria-expanded> y
+           despliega el campo. El form envía a articulos/?q=… y de ahí lo
+           recoge el buscador del listado: no se duplica el filtrado. -->
+      <form class="busca" role="search" method="get" action="./articulos/">
+        <label class="oculto" for="busca-cabecera">Buscar artículos</label>
+        <input class="busca__campo" id="busca-cabecera" type="search" name="q"
+               placeholder="Buscar artículos…" autocomplete="off">
+        <a class="busca__lupa" href="./articulos/" aria-label="Buscar artículos">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="7"></circle>
+            <path d="m20 20-3.6-3.6"></path>
+          </svg>
+        </a>
+      </form>
+    </nav>
+  </div>
+</header>
+
+<main id="contenido">
+
+  <section class="portada portada--video">
+
+    <!-- El video NO lleva src: lo pone js/main.js solo si la pantalla es ancha
+         y no hay peticion de menos movimiento. Asi el 1,1 MB no se descarga en
+         movil, ni con prefers-reduced-motion, ni sin JavaScript. En esos tres
+         casos se ve el poster, que es el primer fotograma del clip.
+         El muted es obligatorio o el navegador bloquea el autoplay. -->
+    <video class="portada__video"
+           poster="./img/portada-poster.jpg"
+           data-src="./video/portada-dama.mp4"
+           width="1928" height="1072"
+           muted loop playsinline preload="none"
+           aria-hidden="true" tabindex="-1"></video>
+
+    <div class="portada__velo" aria-hidden="true"></div>
+
+    <div class="contenedor contenedor--amplio portada__interior">
+      <div class="portada__texto">
+        <!-- ⚠️ AQUÍ IBA UNA LÍNEA DE ÁREAS —«Derecho administrativo · Urbanismo
+             · Jurisdicción contencioso-administrativa»—, en un
+             <p class="portada__antetitulo">. Se retiró por encargo, y con ella
+             se fue su regla de contraste .portada--video .portada__antetitulo,
+             que existía solo por este caso.
+
+             Si alguna vez vuelve, son DOS cosas y no una: el <p> de aquí y esa
+             regla. Sin ella, --acento sobre el vídeo se queda en 2,50:1 y el
+             rótulo se publica ilegible sin que nada avise.
+
+             La clase base .portada__antetitulo SIGUE VIVA: la usa 404.html para
+             el rótulo «Error 404», que va sobre blanco y no necesita la regla.
+
+             Y ojo con la columna de 620 px del hero: la fijaba el ancho de esta
+             línea. El número se conserva porque el titular nuevo cabe en él,
+             pero ya no lo sostiene ningún texto. Razonado en styles.css. -->
+        <h1>Blog jurídico especializado en Derecho Administrativo y Urbanismo</h1>
+        <p class="portada__entradilla">Un espacio de análisis para comprender los fundamentos, la jurisprudencia y la práctica del Derecho Público, tanto en vía administrativa como ante los tribunales.</p>
+        <div class="portada__acciones">
+          <a class="boton boton--principal" href="./articulos/">Explorar artículos</a>
+          <a class="boton" href="./sobre/">Conocer El Derecho Escrito</a>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ================================================================
+       DESTACADO · Lectura recomendada
+       ================================================================
+
+       ⚠️ ESTE BLOQUE LO ESCRIBE scripts/build.mjs. Antes había aquí una lista
+       de ocho datos que había que copiar a mano del artículo —titular,
+       entradilla, categoría en dos formas, fecha en dos formas, minutos, src
+       de la imagen y los DOS href de destino— y un aviso de que ninguno daba
+       error al quedarse desfasado. Ya no hay nada que copiar: los ocho salen
+       del mismo articulo.json del que sale la página del artículo.
+
+       CUÁL ES EL DESTACADO ES UNA DECISIÓN EDITORIAL, no «el más leído»: no
+       hay analítica en el proyecto y afirmarlo sería inventarse un dato. Por
+       eso el rótulo dice quién recomienda y no cuánta gente lo ha leído.
+
+       PARA CAMBIAR DE DESTACADO se pone "destacado": true en el articulo.json
+       que toque. Sin ninguna marca se destaca el más reciente.
+
+       PARA QUITAR LA SECCIÓN ENTERA se borra esta <section>: no queda hueco
+       porque no queda elemento, y la portada pasa del hero a «Últimos
+       artículos». Pero hay que borrar TAMBIÉN las marcas GENERADO:destacado, o
+       el build fallará diciendo que no las encuentra —que es justo lo que
+       tiene que hacer: si desaparecen sin más, dejaría de actualizar este
+       sitio en silencio.
+
+       SI EL ARTÍCULO NO TIENE IMAGEN, el bloque es flex y el texto ocupa el
+       ancho entero solo. Hoy la plantilla siempre la pinta, porque el campo
+       imagen es obligatorio en el JSON. -->
+  <section class="destacado" aria-labelledby="destacado-titulo">
+    <div class="contenedor contenedor--amplio">
+
+      <h2 id="destacado-titulo" class="lista__titulo lista__titulo--destacado">Lectura recomendada</h2>
+
+      <!-- ⚠️ EL TEXTO VA PRIMERO EN EL DOM, y es deliberado. La maqueta pide
+           texto a la izquierda e imagen a la derecha, y se resuelve con el
+           ORDEN DEL MARCADO en vez de con `order` en el CSS: así el orden de
+           lectura —teclado, lector de pantalla, página sin CSS— coincide con el
+           visual en escritorio.
+
+           La única excepción es el móvil, donde la maqueta pide la imagen
+           arriba. Ahí sí se usa `order: -1`, porque invertir el marcado por un
+           tramo rompería los otros dos. Y no se pierde nada: la imagen es
+           decorativa y va aria-hidden, o sea que para un lector de pantalla
+           este bloque es el mismo en los dos casos. -->
+      <!-- GENERADO:destacado inicio — lo reescribe scripts/build.mjs con el
+           artículo más reciente, o con el que lleve "destacado": true en su
+           articulo.json. Ver CLAUDE.md. -->
+      <div class="destacado__pieza">
+
+        <div class="destacado__texto">
+
+          <p class="destacado__antetitulo">
+            <a href="./articulos/?categoria=jurisprudencia"><span class="oculto">Ver artículos de </span>Jurisprudencia</a>
+          </p>
+
+          <h3 class="destacado__titulo">
+            <a href="./articulos/masc-requisito-procedibilidad/">La falta de MASC como requisito de procedibilidad: entre la inadmisión y la subsanación</a>
+          </h3>
+
+          <p class="destacado__entradilla">Analiza la subsanabilidad del requisito de MASC tras la LO 1/2025: incumplimiento material, defectos de acreditación y acceso a la jurisdicción.</p>
+
+          <div class="entrada__meta">
+            <time datetime="2026-09-28">28 septiembre 2026</time>
+            <span class="lectura">15 min de lectura</span>
+            <a class="destacado__leer" href="./articulos/masc-requisito-procedibilidad/">Leer artículo <span class="destacado__flecha" aria-hidden="true">&rarr;</span></a>
+          </div>
+        </div>
+
+        <a class="destacado__imagen" href="./articulos/masc-requisito-procedibilidad/"
+           aria-hidden="true" tabindex="-1">
+          <img src="./articulos/masc-requisito-procedibilidad/portada.jpg" alt=""
+               width="1600" height="1066" loading="lazy" decoding="async">
+        </a>
+
+      </div>
+      <!-- GENERADO:destacado fin -->
+
+    </div>
+  </section>
+
+  <!-- ═══ ÚLTIMOS ARTÍCULOS — ENCENDIDO CON TARJETAS DE EJEMPLO ═══
+
+       ⚠️ LAS TRES TARJETAS DE DENTRO SON DE EJEMPLO Y SE BORRAN. Están solo
+       para que el cliente vea la maqueta de la sección con contenido; sus
+       artículos NO existen. Van marcadas con `.tarjeta--ejemplo` y entre las
+       marcas de INICIO y FIN de más abajo, así que se quitan de golpe.
+
+       LA REGLA DE FONDO no cambia: esta sección lista los artículos que NO son
+       el destacado, y se enseña cuando haya al menos uno. Hoy no hay ninguno
+       —solo existe el artículo destacado—, así que lo que se ve es atrezo.
+
+       CUANDO HAYA ARTÍCULOS REALES: se borran las tres tarjetas de ejemplo y se
+       pega una tarjeta real por artículo, con la plantilla que hay en el
+       comentario de dentro. Si se publican artículos y NO se borran, la portada
+       enseñará artículos inventados junto a los de verdad.
+
+       SI SE QUISIERA VOLVER A APAGAR la sección entera, se le devuelve el
+       atributo `hidden` a la <section>. El aire y la banda de suscripción se
+       recolocan solos, que para eso van en secciones separadas.
+
+       Está explicado en CLAUDE.md, en «Las tarjetas de ejemplo de la portada». -->
+  <section class="lista" aria-labelledby="ultimos-titulo">
+    <div class="contenedor contenedor--amplio">
+
+      <div class="lista__encabezado">
+        <h2 id="ultimos-titulo" class="lista__titulo lista__titulo--destacado">Últimos artículos</h2>
+        <!-- La flecha va en un <span aria-hidden> y no suelta en el texto: así
+             tiene elemento propio que animar, y de paso deja de anunciarse como
+             «flecha derecha» detrás del enlace.
+
+             ⚠️ ESTO ERA UN `.boton .boton--contorno` Y YA NO LO ES. Es un
+             enlace de texto, el mismo estilo que «Leer artículo» del destacado:
+             acento, sin fondo ni filete y con la flecha que se desplaza.
+             Las dos reglas viven juntas en styles.css, agrupadas a propósito.
+
+             No se le devuelven las clases de botón: el encabezado tiene un solo
+             rótulo enfrente y un botón ahí pesaba más que la sección que
+             anuncia. El alto de 44px de pulsación NO se perdió —lo repone
+             `.lista__enlace` con inline-flex y min-height—, así que esto se
+             sigue pudiendo pulsar cómodo en un móvil. -->
+        <p class="lista__mas lista__mas--enlinea">
+          <a class="lista__enlace" href="./articulos/">Ver todos los artículos <span class="lista__flecha" aria-hidden="true">&rarr;</span></a>
+        </p>
+      </div>
+
+      <!-- INICIO LISTADO — vacío a propósito, porque hoy no hay ningún
+           artículo que no sea el destacado. NO se rellena con marcadores:
+           ni tarjetas de «Próximamente», ni <div> de relleno para cuadrar la
+           fila. Un hueco vacío en una rejilla CSS no existe —la celda se crea
+           sola y no se anuncia—, mientras que un <div> vacío sí lo recorre un
+           lector de pantalla como un elemento más de la lista.
+
+           La rejilla lleva SIEMPRE tres columnas, así que con una o dos
+           tarjetas quedan alineadas a la izquierda y con el mismo ancho que
+           tendrían estando tres. No hay que tocar nada para eso.
+
+           PLANTILLA DE TARJETA · se copia dentro de .tarjetas, una por
+           artículo, la más reciente primero. Sustituye lo que va en MAYÚSCULAS:
+
+           <article class="tarjeta tarjeta--abierta">
+             <div class="tarjeta__imagen">
+               <img src="./img/ARCHIVO.jpg"
+                    alt="DESCRIPCIÓN DE LO QUE ENSEÑA ESTE ENCUADRE"
+                    width="1600" height="1066" loading="lazy" decoding="async">
+             </div>
+             <p class="etiqueta etiqueta--plana">
+               <a href="./articulos/?categoria=CLAVE"><span class="oculto">Ver artículos de </span>CATEGORÍA</a>
+             </p>
+             <h3 class="entrada__titulo">
+               <a href="./articulos/SLUG/">TITULAR</a>
+             </h3>
+             <p class="entrada__extracto">EXTRACTO DE UNA O DOS LÍNEAS.</p>
+             <div class="entrada__meta">
+               <time datetime="AAAA-MM-DD">D mes AAAA</time>
+               <span class="lectura">N min</span>
+             </div>
+           </article>
+
+           Cuatro avisos sobre esa plantilla:
+
+           · Va en `.tarjeta--abierta`, NO en `.tarjeta--caja`. La caja es la
+             del listado de articulos/; la abierta es la de la portada, sin
+             fondo ni filete y con la imagen en 16:9. Son dos modificadores del
+             mismo componente a propósito: el listado tiene medidas atadas a su
+             caja y no debe cambiar.
+           · La CLAVE del href de la categoría va en minúsculas y sin acentos
+             («fundamento»), distinta de la CATEGORÍA visible («Fundamento»).
+             Un grep de la etiqueta visible no encuentra el href.
+           · El <span class="oculto"> es el nombre accesible: «Fundamento» a
+             secas no dice adónde lleva cuando un lector de pantalla enumera los
+             enlaces. Va en un <span> y no en aria-label para que el nombre
+             CONTENGA el texto visible, que es lo que pide el control por voz.
+           · El alt describe ESTE encuadre, no el del artículo. La tarjeta
+             recorta en 16:9 y la cabecera del artículo en 21:9, así que se
+             repite la imagen pero no la descripción.
+
+           No hay que añadir nada para que la tarjeta entera sea pulsable: lo
+           hace el ::after del titular, que está en el CSS. Tampoco separadores
+           «|» en los metadatos — los pone el CSS.
+
+           ⚠️ OJO A LA DIFERENCIA CON LAS TARJETAS DE EJEMPLO DE ABAJO: una
+           tarjeta real lleva DOS enlaces —el titular y la categoría— y no lleva
+           `.tarjeta--ejemplo`. Las de ejemplo no llevan ninguno. Al sustituir,
+           no basta con cambiar los textos: hay que envolver el titular y la
+           categoría en sus <a> y quitar la clase de ejemplo. -->
+      <div class="tarjetas">
+
+        <!-- GENERADO:ultimos inicio — los artículos que NO son el
+             destacado, máximo tres. Lo reescribe scripts/build.mjs. -->
+
+        <!-- GENERADO:ultimos fin -->
+
+        <!-- ╔══════════════════════════════════════════════════════════════╗
+             ║  EJEMPLO — BORRAR CUANDO HAYA ARTÍCULOS REALES               ║
+             ╚══════════════════════════════════════════════════════════════╝
+
+             Las tres tarjetas que siguen son ATREZO VISUAL. Sus artículos no
+             existen: no están en articulos/, ni en el sitemap, ni en el feed,
+             ni en el buscador, ni en los datos estructurados. Y es correcto que
+             no estén — son ejemplos, no contenido.
+
+             POR ESO NO LLEVAN NINGÚN ENLACE, y es la diferencia que importa:
+             ni el titular ni la categoría. Un enlace daría 404, y uno que
+             apuntara al artículo real mentiría sobre lo que abre. Sin <a> no
+             hay cursor de mano ni subrayado, así que nada invita a pulsarlas.
+
+             `.tarjeta--ejemplo` apaga además el zoom de la imagen al pasar el
+             ratón: una tarjeta que reacciona pero no lleva a ningún sitio es
+             peor que una quieta. El resto del aspecto lo da `.tarjeta--abierta`,
+             el mismo modificador que usarán las tarjetas reales.
+
+             Las imágenes son las que ya había en img/ y NO tienen relación con
+             los titulares inventados. Al poner artículos reales, cada uno trae
+             la suya.
+
+             PARA BORRARLAS: se quita todo lo que hay entre esta marca y la de
+             FIN EJEMPLO. Si al hacerlo no queda ninguna tarjeta, hay que
+             devolver el atributo `hidden` a la <section> de arriba. -->
+
+        <article class="tarjeta tarjeta--abierta tarjeta--ejemplo">
+          <div class="tarjeta__imagen">
+            <img src="./img/damajusticia.jpg"
+                 alt="Figura de bronce de la justicia con los ojos vendados y los dos platos de la balanza"
+                 width="1600" height="1066" loading="lazy" decoding="async">
+          </div>
+          <h3 class="entrada__titulo">La discrecionalidad técnica de la Administración</h3>
+          <p class="entrada__extracto">Análisis de los límites de la discrecionalidad técnica en la toma de decisiones públicas y su control jurisdiccional.</p>
+          <div class="entrada__meta">
+            <time datetime="2026-05-20">20 mayo 2026</time>
+            <span class="lectura">12 min</span>
+          </div>
+        </article>
+
+        <article class="tarjeta tarjeta--abierta tarjeta--ejemplo">
+          <div class="tarjeta__imagen">
+            <img src="./img/damajusticia.jpg"
+                 alt="Figura de bronce de la justicia con los ojos vendados y los dos platos de la balanza"
+                 width="1600" height="1066" loading="lazy" decoding="async">
+          </div>
+          <h3 class="entrada__titulo">El interés legítimo en el recurso contencioso-administrativo</h3>
+          <p class="entrada__extracto">A propósito de la jurisprudencia reciente sobre legitimación activa y el concepto de interés legítimo.</p>
+          <div class="entrada__meta">
+            <time datetime="2026-04-22">22 abril 2026</time>
+            <span class="lectura">14 min</span>
+          </div>
+        </article>
+
+        <article class="tarjeta tarjeta--abierta tarjeta--ejemplo">
+          <div class="tarjeta__imagen">
+            <img src="./img/damajusticia.jpg"
+                 alt="Figura de bronce de la justicia con los ojos vendados y los dos platos de la balanza"
+                 width="1600" height="1066" loading="lazy" decoding="async">
+          </div>
+          <h3 class="entrada__titulo">El control judicial de los planes parciales: límites y estándares</h3>
+          <p class="entrada__extracto">Sobre el alcance del control judicial en la revisión de los planes parciales y los estándares de motivación exigibles.</p>
+          <div class="entrada__meta">
+            <time datetime="2026-04-15">15 abril 2026</time>
+            <span class="lectura">11 min</span>
+          </div>
+        </article>
+
+        <!-- ╔══════════════════════════════════════════════════════════════╗
+             ║  FIN EJEMPLO — hasta aquí lo que hay que borrar              ║
+             ╚══════════════════════════════════════════════════════════════╝ -->
+
+      </div>
+      <!-- FIN LISTADO -->
+
+    </div>
+  </section>
+
+  <!-- ═══ BANDA DE SUSCRIPCIÓN — SECCIÓN PROPIA, Y NO POR CAPRICHO ═══
+
+       Vivía dentro de «Últimos artículos». Se saca porque esa sección se apaga
+       cuando no hay artículos que listar, y al apagarse se llevaba la banda con
+       ella: la portada se quedaba sin su única captación de correo por un motivo
+       que no tiene nada que ver con ella.
+
+       Separadas, cada una responde a lo suyo: la lista aparece cuando hay algo
+       que listar y la banda está siempre, porque cierra la página.
+
+       ⚠️ Tiene que seguir siendo el ÚLTIMO hijo del <main>. De ahí saca los
+       80 px de cierre contra el pie, por `main > .lista:last-child`. Si alguien
+       mete una sección detrás, esos 80 se van con ella y la banda se queda
+       pegada al pie sin que nada avise. -->
+  <section class="lista lista--cierre">
+    <div class="contenedor contenedor--amplio">
+
+      <!-- Banda de newsletter. Mismo componente que el del lateral del
+           artículo, en su variante horizontal. Sin backend, igual que aquel:
+           a propósito no hay <form> y los controles van deshabilitados, para
+           que no se pueda enviar nada por accidente. -->
+      <aside class="suscripcion suscripcion--banda" aria-labelledby="suscripcion-titulo">
+        <svg class="suscripcion__icono" width="34" height="34" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+          <rect x="2" y="5" width="20" height="14" rx="2"></rect>
+          <path d="m2 7 10 6 10-6"></path>
+        </svg>
+
+        <div class="suscripcion__texto">
+          <!-- «El Derecho Escrito» va en <em> aquí y en el lateral del
+               artículo. El documento del cliente solo lo marcaba en cursiva en
+               el segundo, pero se unifica por decisión suya: el nombre va en
+               cursiva siempre que aparece DENTRO de un texto.
+
+               En los rótulos de página NO: el <h1> de «Acerca de» y los
+               <title> llevan el nombre en redonda. -->
+          <p class="suscripcion__reclamo" id="suscripcion-titulo">Sigue las publicaciones de <em>El Derecho Escrito</em></p>
+          <p class="suscripcion__apoyo">Suscríbete para recibir los nuevos artículos sobre Derecho administrativo, urbanismo y jurisdicción contencioso-administrativa.</p>
+        </div>
+
+        <div class="suscripcion__accion">
+          <label class="oculto" for="correo-banda">Correo electrónico</label>
+          <input type="email" id="correo-banda" placeholder="Correo electrónico" disabled>
+          <button class="boton boton--principal" type="button" disabled>Suscribirme</button>
+          <p class="suscripcion__nota">Recibirás un correo con cada nueva publicación. Puedes darte de baja en cualquier momento.</p>
+        </div>
+      </aside>
+
+    </div>
+  </section>
+
+  <!-- Aquí iba la franja de «Áreas del derecho», con las cuatro materias del
+       despacho. Se retira entera, con su CSS.
+
+       Al irse, .lista pasa a ser el último hijo del <main> y recoge sola el
+       cierre de 80 px de `main > .lista:last-child`, que existe justo para eso:
+       la sección que cierra la página necesita el hueco y la que lleva otra
+       detrás, no. No hay que tocar ningún número. -->
+
+</main>
+
+<footer class="pie">
+  <div class="contenedor">
+    <nav class="pie__nav" aria-label="Navegación del pie">
+      <a href="./articulos/">Artículos</a>
+      <a href="./sobre/">Acerca de</a>
+      <a href="./contacto/">Contacto</a>
+      <a href="./feed.xml">RSS</a>
+    </nav>
+    <p>El Derecho Escrito &middot; &copy; <span id="anio">2026</span></p>
+    <p>Contenido divulgativo. No constituye asesoramiento jurídico.</p>
+  </div>
+</footer>
+
+<script src="./js/main.js" defer></script>
+</body>
+</html>
