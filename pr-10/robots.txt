@@ -1,0 +1,19 @@
+# DEMO EN PRUEBAS — no indexar.
+# Al pasar la web al dominio real, restaura el bloque de abajo.
+User-agent: *
+Disallow: /
+
+# --- Version para produccion (elderechoescrito.es) ---
+# User-agent: *
+# Allow: /
+#
+# User-agent: GPTBot
+# Allow: /
+#
+# User-agent: ClaudeBot
+# Allow: /
+#
+# User-agent: PerplexityBot
+# Allow: /
+#
+# Sitemap: https://elderechoescrito.es/sitemap.xml
