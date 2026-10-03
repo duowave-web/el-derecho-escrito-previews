@@ -5253,13 +5253,34 @@ body:has(.progreso) .cabecera {
 
 /* Los nombres de quien comenta van en la familia de titulares, como los
    titulares de tarjeta, y la fecha en la de interfaz con el cuerpo y el
-   tracking de los metadatos del sitio. Son las dos unicas reglas que tocan
-   clases de Artalk: el resto lo hacen las variables. */
+   tracking de los metadatos del sitio.
 
-.comentarios .artalk .atk-nick {
+   ⚠️ ESTA REGLA ESTABA MEDIO MUERTA Y POR ESO LOS DOS NOMBRES DE UNA RESPUESTA
+   SALIAN DE TAMAÑOS DISTINTOS —«Arnau ▸ Arnau» con el segundo mas grande—.
+
+   Artalk tiene DOS elementos de nombre en la cabecera de un comentario, y los
+   viste de forma desigual:
+
+     .atk-item.atk-nick          el autor del comentario   -> le pone 14px
+     .atk-reply-at > .atk-nick   a quien responde          -> NO le pone tamaño
+
+   Y su selector del primero, `.atk-comment > .atk-main > .atk-header
+   .atk-item.atk-nick`, pesa (0,4,0): mas que los (0,3,0) de
+   `.comentarios .artalk .atk-nick`. Asi que de los dos nombres, el mio ganaba
+   SOLO en el segundo. El resultado era 14px contra 16,8px en la misma linea,
+   sin que nada avisara.
+
+   Se sube a (0,6,0) nombrando los dos casos a la vez. El `a` del final hace
+   falta porque cuando el comentarista dejo web, el nombre va dentro de un
+   enlace que Artalk viste por separado. */
+
+.comentarios .artalk .atk-comment .atk-header .atk-item.atk-nick,
+.comentarios .artalk .atk-comment .atk-header .atk-item.atk-nick a,
+.comentarios .artalk .atk-comment .atk-header .atk-reply-at .atk-nick {
   font-family: var(--display);
   font-size: 1.05rem;
   font-weight: 600;
+  line-height: 1.3;
 }
 
 .comentarios .artalk .atk-date {
@@ -5502,6 +5523,73 @@ body:has(.progreso) .cabecera {
 .comentarios .artalk .atk-comment {
   padding-left: 0;
   padding-right: 0;
+}
+
+/* ⚠️ FUERA EL ENLACE «MENSAJES», QUE ABRE EL PANEL LATERAL DE ARTALK.
+
+   Aparece a la derecha del recuento en cuanto el lector se identifica —basta
+   con haber comentado una vez— y abre una capa con «Messages», «Mentions»,
+   «Mine» y «Pending» EN INGLES: esas cadenas no estan en el objeto de
+   traduccion de la interfaz, viven en el panel, que es otra aplicacion.
+
+   NO HAY OPCION DE CONFIGURACION. Se comprobo en el bundle: el enlace no
+   depende de ninguna opcion, sino de si hay usuario identificado —
+
+     Text = t.is_admin ? T("ctrlCenter") : T("msgCenter")
+     … else n.classList.add("atk-hide")
+
+   — y `showSidebar()` se invoca desde UN solo sitio, el `onclick` de este
+   elemento. Verificado con un grep: al ocultarlo no queda ningun otro acceso.
+
+   ⚠️ ESTO NO LE QUITA NADA AL AUTOR. Responder con la etiqueta «Autor» es cosa
+   del EDITOR —escribe su nombre y su correo, Artalk le pide la contraseña— y no
+   pasa por el panel. Y moderar lo hace en comentarios.elderechoescrito.es/admin,
+   que es una URL aparte y la que ya documenta PARA-EL-CLIENTE.md. Lo unico que
+   pierde es un atajo que ademas estaba en ingles.
+
+   Se oculta SOLO este <span> y no todo `.atk-right-action`, que es su padre:
+   ahi dentro vive tambien `admin-close-comment` —cerrar los comentarios de la
+   pagina—, que es una accion de moderacion legitima, esta traducida y no abre
+   ningun panel. */
+
+.comentarios .artalk .atk-list-header [data-action="open-sidebar"] {
+  display: none;
+}
+
+/* ⚠️ «Responder @Nombre» SALIA CORTADO POR UN `max-width: 8em`, que a 14px son
+   112px: cualquier nombre de mas de ocho caracteres perdia el final.
+
+   Se suelta el tope y se deja que lo limite el sitio que haya. El recorte con
+   puntos suspensivos se CONSERVA —`text-overflow`, `overflow` y `white-space`
+   siguen siendo de Artalk— pero pasa a actuar solo cuando de verdad no cabe,
+   que es lo que se pedia.
+
+   ⚠️ NO BASTA CON SOLTAR EL `max-width`, Y HAY QUE TOCAR LA CADENA ENTERA. Con
+   solo quitar el tope, un nombre muy largo no se recorta: DESBORDA LA FILA. Un
+   item de flex no baja de su tamaño de contenido salvo que se le diga, y aqui
+   hay tres anidados —`.atk-bottom-left`, `.atk-state-wrap`, `.atk-state-btn`—
+   que hay que dejar encoger antes de que el recorte pueda actuar.
+
+   Medido con un nombre de 925px a 1440: sin la cadena desbordaba la fila; con
+   ella se recorta a 671 y el aspa sigue en su sitio. Un nombre normal —«Arnau
+   Montero Miranda», 258px— no se recorta nada.
+
+   ⚠️ POR DEBAJO DE 768 px ESTA ETIQUETA NO EXISTE: Artalk la oculta entera en
+   una media query propia y deja solo el aspa. No es cosa de estas reglas, y no
+   se repone: en una columna de 327px el nombre no cabria de todas formas. */
+
+.comentarios .artalk .atk-main-editor > .atk-bottom > .atk-bottom-left {
+  min-width: 0;
+}
+
+.comentarios .artalk .atk-main-editor .atk-state-wrap,
+.comentarios .artalk .atk-main-editor .atk-state-btn {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.comentarios .artalk .atk-main-editor > .atk-bottom .atk-state-btn .atk-text-wrap {
+  max-width: 100%;
 }
 
 /* ⚠️ «POWERED BY ARTALK»: SE QUITA CON CSS PORQUE NO HAY OPCION PARA ELLO, y se

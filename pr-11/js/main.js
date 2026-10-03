@@ -1476,9 +1476,66 @@
     cuandoMonte(caja, function () {
       etiquetarCampos(caja);
       moverNota(caja);
+      recuentoEnPlural(caja);
     });
 
     return artalk;
+  }
+
+  /* ⚠️ «1 COMENTARIOS»: ARTALK NO SABE DE PLURALES Y HAY QUE ARREGLARLO AQUÍ.
+
+     Su traductor es un reemplazo de marcadores y nada más —`{count}` por el
+     número, con una expresión regular— así que la cadena del recuento es la
+     misma para 0, para 1 y para 20. Con `counter: '{count} comentarios'` el
+     caso de uno sale mal, y no hay ninguna forma de arreglarlo desde el objeto
+     de traducción.
+
+     ⚠️ SE VIGILA EL DOM Y NO SE ESCUCHAN LOS EVENTOS DE ARTALK, que también
+     existen —`list-loaded`, `comment-inserted`, `comment-deleted`…—. Con los
+     eventos habría que acertar CON TODOS los que cambian el número y además
+     llegar DESPUÉS de que Artalk haya repintado; perder esa carrera deja
+     «1 comentarios» otra vez, en silencio. Un observador se entera de cualquier
+     repintado, venga del evento que venga.
+
+     ⚠️ Y NO SE CICLA, aunque el observador vigile justo lo que esta función
+     escribe: antes de tocar nada comprueba si la palabra ya es la correcta y se
+     va. La escritura es idempotente, así que la mutación que ella misma provoca
+     no produce una segunda escritura. Por eso no hace falta ninguna bandera
+     —que además no serviría: los callbacks del observador son microtareas y la
+     bandera ya estaría a false cuando llegasen—.
+
+     El plural es el valor por defecto en el objeto de traducción, así que si
+     esto no llegara a ejecutarse el peor caso es el fallo de hoy, no uno nuevo. */
+
+  function recuentoEnPlural(caja) {
+    const cont = caja.querySelector(".atk-comment-count");
+    if (!cont || !("MutationObserver" in window)) return;
+
+    const ajustar = function () {
+      const num = cont.querySelector(".atk-comment-count-num");
+      const texto = cont.querySelector(".atk-text");
+      if (!num || !texto) return;
+
+      const n = parseInt(String(num.textContent).replace(/[^\d]/g, ""), 10);
+      if (!isFinite(n)) return;
+
+      /* La palabra es el último nodo de TEXTO de `.atk-text`; el número vive en
+         su propio <span> delante. Se toca solo ese nodo para no tirar el span,
+         que es de Artalk. */
+      const ultimo = texto.lastChild;
+      if (!ultimo || ultimo.nodeType !== 3) return;
+
+      const quiero = " " + (n === 1 ? "comentario" : "comentarios");
+      if (ultimo.textContent === quiero) return;
+      ultimo.textContent = quiero;
+    };
+
+    new MutationObserver(ajustar).observe(cont, {
+      childList: true,
+      subtree: true,
+      characterData: true,
+    });
+    ajustar();
   }
 
   /* \u26a0\ufe0f ESTO ESTUVO EN UN `setTimeout(\u2026, 0)` Y LLEGABA DEMASIADO PRONTO.
