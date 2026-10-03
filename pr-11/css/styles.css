@@ -5167,26 +5167,35 @@ body:has(.progreso) .cabecera {
    articulo y tienen que leerse como piezas hermanas, no como una pieza del
    sitio y un widget pegado. */
 
-/* ⚠️ EL `margin-bottom` NO ES DECORATIVO: REPONE UN HUECO QUE EL TRASLADO SE
-   LLEVO POR DELANTE.
+/* ⚠️ 40 ARRIBA Y 40 ABAJO, Y LOS DOS ESTAN MEDIDOS CONTRA EL RITMO DE LA ZONA.
 
-   «Volver a los articulos» NO tiene margen propio —`margin-top: 0`—: los 40px
-   que lo separaban de lo de arriba los ponia el `margin-bottom` de
-   `.referencias`. Al meter los comentarios en medio, ese margen pasa a
-   separar referencias de comentarios y «Volver» se queda PEGADO a la seccion:
-   medido, 0px.
+   La seccion vive entre «Compartir» y el aviso legal, en una zona cuyos huecos
+   son 40 / 40 / 28:
 
-   No daba ningun error y solo se ve con el widget montado, que en local no
-   carga. Los 40 son los mismos que habia antes entre referencias y «Volver»,
-   asi que el ritmo de esa zona —40 / 40 / 28, documentado en CLAUDE.md— se
-   mantiene exacto.
+     referencias → «Volver»             40
+     «Volver» → boton PDF               40
+     boton PDF → filete de «Compartir»  28   <- el par apretado, deliberado
+     «Compartir» → filete de aqui       40
+     aqui → aviso legal                 40
 
-   Arriba son 56 y no 40 porque el margen de `.referencias` y este COLAPSAN y
-   manda el mayor; es el mismo 56 con el que abre `.continua`. */
+   ⚠️ ARRIBA ESTUVO EN 56 Y DESENTONABA. Era el valor de `.continua`, que cierra
+   la pagina; aqui caia justo despues del hueco mas apretado de la zona —los
+   28— y hacia el salto mas grande de toda la columna. Con 40 la zona entera se
+   lee a un solo ritmo, con el 28 como unica excepcion a proposito.
+
+   El `margin-bottom` de `.compartir` son 32 y COLAPSA con este: manda el mayor,
+   asi que los 40 salen de aqui.
+
+   ⚠️ Y EL `margin-bottom` NO SE PUEDE SOLTAR A 0. El aviso legal es un <p> y le
+   cae `.articulo p`, que trae `margin-top: 0`: sin estos 40, el aviso quedaria
+   PEGADO al final de los comentarios. Antes del traslado esa separacion la
+   ponia el `margin-bottom: 32` de `.compartir`, que ahora ya no es su vecino.
+
+   Hacia abajo sigue habiendo progresion: 48 del aviso a `.paso` y 56 de `.paso`
+   a `.continua`, o sea que cuanto mas lejos del texto, mas aire. */
 
 .comentarios {
-  margin-top: 56px;
-  margin-bottom: 40px;
+  margin: 40px 0;
   padding-top: 40px;
   border-top: 1px solid var(--borde);
 }
