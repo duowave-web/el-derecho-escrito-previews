@@ -1465,6 +1465,17 @@
       avatarURLBuilder: function (comentario) {
         return avatarDeIniciales(comentario && comentario.nick);
       },
+
+      /* ⚠️ ES LO QUE ARREGLA «22 hace unos minutos», y no el objeto de
+         traducción: Artalk pone el número DELANTE de la cadena y sus claves de
+         fecha no tienen marcador de posición. Razonado entero sobre
+         `fechaRelativa()`.
+
+         Artalk la llama al montar cada comentario y otra vez en el refresco de
+         cada 30 segundos, así que las fechas se siguen poniendo al día solas.
+         Si devolviera algo vacío, Artalk cae a su propio formato: el peor caso
+         es el fallo de hoy, no uno nuevo. */
+      dateFormatter: fechaRelativa,
     });
 
     /* \u26a0\ufe0f LOS CAMPOS DE ARTALK NO TIENEN <label>: su marcado es
@@ -1536,6 +1547,94 @@
       characterData: true,
     });
     ajustar();
+  }
+
+  /* --- La fecha relativa de cada comentario -----------------------------
+     \u00ab22 hace unos minutos\u00bb. El n\u00famero sal\u00eda DELANTE de la cadena traducida,
+     que es donde el ingl\u00e9s pone \u00abago\u00bb.
+
+     \u26a0\ufe0f ESTO NO SE PUEDE ARREGLAR DESDE EL OBJETO DE TRADUCCI\u00d3N, y conviene
+     saberlo antes de intentarlo. Artalk compone la cadena con un literal de
+     plantilla y el n\u00famero SIEMPRE va primero:
+
+       `${minutos} ${t("minutes")}`     y     `${horas} ${t("hours")}`
+
+     No hay ning\u00fan marcador de posici\u00f3n \u2014ni `{count}` ni equivalente\u2014 en las
+     claves `seconds`, `minutes`, `hours` y `days`, as\u00ed que no existe forma de
+     decirle que el n\u00famero va detr\u00e1s. `now` s\u00ed se usa sola, sin n\u00famero.
+
+     Tampoco se parchea el DOM, aunque el recuento de arriba s\u00ed lo haga: aqu\u00ed
+     hay una opci\u00f3n de configuraci\u00f3n, `dateFormatter(fecha) => texto`, que
+     Artalk invoca en los dos sitios donde pinta una fecha \u2014al montar cada
+     comentario y en el refresco que repasa todas cada 30 segundos\u2014. Un
+     observador tendr\u00eda que cubrir esos dos caminos a mano.
+
+     \u26a0\ufe0f Y NO TOCA NING\u00daN ATRIBUTO, que era el riesgo. Artalk guarda la marca de
+     tiempo exacta en `data-atk-comment-date` y la escribe en una l\u00ednea aparte
+     de la del texto, as\u00ed que el formateador no la ve. Comprobado adem\u00e1s que
+     `.atk-date` es un `<span>` SIN `title`: hoy la fecha exacta no se ense\u00f1a
+     al pasar el rat\u00f3n, as\u00ed que no hay tooltip que conservar.
+
+     Los tramos son LOS MISMOS que los de Artalk, a prop\u00f3sito: as\u00ed el widget
+     no cambia de comportamiento, solo de idioma.
+
+       menos de 10 s  ahora mismo          (Artalk: \u00abjust now\u00bb, sin n\u00famero)
+       10\u201359 s        hace N segundos
+       1\u201359 min       hace N minutos
+       1\u201323 h         hace N horas
+       1\u20137 d\u00edas       hace N d\u00edas
+       8 d\u00edas o m\u00e1s   3 de octubre de 2026
+       en el futuro   ahora mismo          (reloj del lector adelantado)
+
+     \u26a0\ufe0f NO HAY \u00abAYER\u00bb, y no es un olvido: Artalk no lo distingue \u2014un d\u00eda dice
+     \u00ab1 days ago\u00bb\u2014 y a\u00f1adirlo obliga a mezclar dos aritm\u00e9ticas que NO coinciden.
+     \u00abHace un d\u00eda\u00bb se cuenta en tiempo transcurrido y \u00abayer\u00bb en d\u00edas de
+     calendario, y alrededor de la medianoche discrepan: un comentario de las
+     23:00 le\u00eddo a la 01:00 tiene dos horas, pero es de ayer. Cualquiera de las
+     dos salidas se lee mal en alg\u00fan caso, as\u00ed que es una decisi\u00f3n de dise\u00f1o y
+     no se mete de tapadillo.
+
+     A partir del octavo d\u00eda Artalk pone `2026-10-03`. Aqu\u00ed se compone la fecha
+     larga del sitio, que es la graf\u00eda que ya usan la ficha del art\u00edculo y las
+     tarjetas. Los nombres de mes se repiten respecto a `MESES` de
+     plantilla.mjs, y es inevitable: ese archivo es del generador y no se sirve
+     al navegador. */
+
+  const MESES_LARGOS = [
+    "enero", "febrero", "marzo", "abril", "mayo", "junio",
+    "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre",
+  ];
+
+  function hace(n, singular, plural) {
+    return "hace " + n + " " + (n === 1 ? singular : plural);
+  }
+
+  function fechaRelativa(fecha) {
+    const transcurrido = Date.now() - fecha.getTime();
+
+    /* El reloj del lector puede ir adelantado respecto al del servidor. Artalk
+       tambi\u00e9n cae aqu\u00ed en \u00abjust now\u00bb en vez de ense\u00f1ar una fecha futura. */
+    if (transcurrido < 10000) return "ahora mismo";
+
+    const segundos = Math.round(transcurrido / 1000);
+    if (segundos < 60) return hace(segundos, "segundo", "segundos");
+
+    const minutos = Math.floor(transcurrido / 60000);
+    if (minutos < 60) return hace(minutos, "minuto", "minutos");
+
+    const horas = Math.floor(transcurrido / 3600000);
+    if (horas < 24) return hace(horas, "hora", "horas");
+
+    const dias = Math.floor(transcurrido / 86400000);
+    if (dias < 8) return hace(dias, "d\u00eda", "d\u00edas");
+
+    return (
+      fecha.getDate() +
+      " de " +
+      MESES_LARGOS[fecha.getMonth()] +
+      " de " +
+      fecha.getFullYear()
+    );
   }
 
   /* \u26a0\ufe0f ESTO ESTUVO EN UN `setTimeout(\u2026, 0)` Y LLEGABA DEMASIADO PRONTO.
@@ -1682,11 +1781,23 @@
     pin: "Fijar arriba",
     unpin: "Dejar de fijar",
 
-    /* Tiempo */
-    seconds: "hace unos segundos",
-    minutes: "hace unos minutos",
-    hours: "hace unas horas",
-    days: "hace unos d\u00edas",
+    /* Tiempo
+       \u26a0\ufe0f ESTAS CUATRO YA NO SE USAN: las fechas las compone `fechaRelativa()`
+       por la opci\u00f3n `dateFormatter`. Son el RESPALDO, y solo se ven si esa
+       funci\u00f3n devolviera algo vac\u00edo.
+
+       \u26a0\ufe0f Y POR ESO DEJARON DE DECIR \u00abhace unos minutos\u00bb, que era justo el
+       fallo: Artalk escribe `${numero} ${traduccion}`, as\u00ed que esa redacci\u00f3n
+       daba \u00ab22 hace unos minutos\u00bb. No se pueden arreglar aqu\u00ed \u2014el n\u00famero va
+       delante y no hay marcador de posici\u00f3n\u2014 pero s\u00ed se puede elegir una
+       redacci\u00f3n que aguante en esa posici\u00f3n. As\u00ed el respaldo degrada a
+       \u00ab22 minutos\u00bb, que no miente, en vez de reproducir el fallo.
+
+       `now` va sola, sin n\u00famero, as\u00ed que esa s\u00ed es una frase entera. */
+    seconds: "segundos",
+    minutes: "minutos",
+    hours: "horas",
+    days: "d\u00edas",
     now: "ahora mismo",
 
     /* Comprobaciones */
