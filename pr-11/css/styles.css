@@ -5412,24 +5412,71 @@ body:has(.progreso) .cabecera {
 
    Se esconde la CABECERA y se deja el mensaje, que es el que habla como una
    persona. `:has()` es lo que permite distinguir el caso vacio sin JavaScript:
-   `.atk-no-comment` solo existe cuando la lista esta vacia.
+   `.atk-list-no-comment` solo existe cuando la lista esta vacia.
 
    Es el mismo recurso que ya usan `body:has(.progreso)` y la ficha del
-   articulo, asi que no se estrena nada. */
+   articulo, asi que no se estrena nada.
 
-.comentarios .artalk > .atk-list:has(.atk-no-comment) > .atk-list-header {
+   ⚠️ LA CLASE ES `.atk-list-no-comment` Y AQUI DECIA `.atk-no-comment`, ASI QUE
+   LA REGLA NO CASABA CON NADA Y EL RECUENTO «0 comentarios» SEGUIA SALIENDO.
+
+   El nombre equivocado salio de leer un `grep` RECORTADO del bundle: la captura
+   empezaba a mitad de palabra —«t-no-comment"></div>»— y se leyo como el nombre
+   entero cuando en realidad era la cola de «atk-lis|t-no-comment».
+
+   Y la comprobacion de entonces no lo cazo porque se hizo inyectando un
+   elemento con ESE MISMO nombre inventado: la prueba confirmaba la suposicion
+   en vez de contrastarla. El arbol real hay que mirarlo en el navegador, que es
+   de donde sale este:
+
+     .atk-list
+       .atk-list-header          <- el recuento, lo que se esconde
+       .atk-list-body
+         .atk-list-comments-wrap
+           .atk-list-no-comment  <- el mensaje
+       .atk-list-footer
+
+   ⚠️ DENTRO DE `:has()` VA UN DESCENDIENTE Y NO UN HIJO DIRECTO: el mensaje
+   cuelga de `.atk-list-body > .atk-list-comments-wrap`, dos niveles por debajo
+   de `.atk-list`. */
+
+.comentarios .artalk > .atk-list:has(.atk-list-no-comment) > .atk-list-header {
   display: none;
 }
 
-/* El mensaje de lista vacia: a la izquierda y con la tipografia del sitio.
-   Artalk lo centra y lo deja en su gris. */
+/* El mensaje de lista vacia. Artalk lo trae como una caja flex de 150px de
+   alto, centrada en los dos ejes y a 19px; aqui va alineado a la izquierda con
+   el titulo de la seccion y con la tipografia del cuerpo.
 
-.comentarios .artalk .atk-no-comment {
+   ⚠️ NO BASTA CON `text-align: left`. Artalk lo centra con DOS mecanismos a la
+   vez —`text-align: center` y `justify-content: center` sobre un flex— y el
+   segundo manda sobre el primero: cambiando solo el `text-align`, el texto
+   seguiria en el centro.
+
+   Se resuelve pasando a `display: block`, que deja el `justify-content` sin
+   efecto en vez de tener que contrarrestarlo: es una linea de texto, no una
+   fila que colocar. Y con ello el `height: 150px` pasa a `auto`. */
+
+.comentarios .artalk .atk-list-no-comment {
+  display: block;
+  height: auto;
   padding: 8px 0;
   text-align: left;
   font-family: var(--texto);
   font-size: 1rem;
+  line-height: 1.7;
   color: var(--tinta-suave);
+}
+
+/* ⚠️ Y EL CUERPO DE LA LISTA RESERVA 150px QUE YA NO HACEN FALTA. Artalk le pone
+   `min-height: 150px` para que la caja no se encoja mientras carga; con el
+   mensaje ya en una linea, eso dejaba un hueco vacio debajo de el.
+
+   Quien ya reserva sitio es `.comentarios__caja`, con sus 220px, asi que este
+   es redundante. */
+
+.comentarios .artalk > .atk-list > .atk-list-body {
+  min-height: 0;
 }
 
 /* Con comentarios, el recuento alinea con el resto de la seccion: Artalk le
