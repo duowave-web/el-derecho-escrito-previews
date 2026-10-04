@@ -1,0 +1,538 @@
+/* ==========================================================================
+   HOJA DE IMPRESION
+
+   La usan dos cosas distintas y conviene tenerlo claro antes de tocarla:
+
+   1. El lector que le da a «imprimir» en el navegador. Se carga con
+      <link media="print">, asi que en pantalla no pesa nada.
+   2. scripts/pdf.mjs, que abre la pagina ya generada con Chromium y le pide un
+      PDF. Playwright emula el medio `print`, asi que ve exactamente esto.
+
+   ⚠️ NO HAY UNA PLANTILLA DE PDF APARTE, Y ES A PROPOSITO. El PDF es la propia
+   pagina del articulo vista con otro medio. Una plantilla separada seria un
+   segundo sitio donde vive el articulo, y se desincronizaria en silencio: el
+   dia que alguien anadiera un tipo de bloque nuevo, el PDF lo dejaria fuera sin
+   dar ningun error.
+
+   Lo unico que pdf.mjs anade al documento es la PORTADA, porque es una pieza
+   que no existe en la web. Todo lo demas ya esta y aqui solo se reviste.
+   ========================================================================== */
+
+/* ------------------------------------------------- pagina y margenes ---- */
+
+/* A4. Los margenes reales los pone pdf.mjs en la llamada a page.pdf(), y NO
+   aqui: Chromium ignora el `margin` de @page cuando se le pasan margenes por
+   la API, asi que tenerlos en los dos sitios es tener uno que miente.
+
+   Lo que si vale aqui es el `size`, que es lo que ve quien imprime desde el
+   navegador sin pasar por el script. */
+
+@page {
+  size: A4;
+}
+
+/* ------------------------------------------------- lo que no se imprime - */
+
+/* Navegacion, controles y todo lo que solo sirve estando en la web. Un PDF no
+   tiene adonde navegar: un menu impreso es tinta que no lleva a ningun sitio.
+
+   Van todos en una lista y no repartidos por el archivo para que se pueda leer
+   de un vistazo QUE desaparece, que es la pregunta que se hace quien abre este
+   archivo. */
+
+.saltar,
+.progreso,
+.cabecera,
+.pie,
+.articulo__lateral,
+.articulo__acciones,
+.volver,
+.compartir,
+.descarga,
+.paso,
+.continua,
+.comentarios,
+.suscripcion,
+.busca {
+  display: none !important;
+}
+
+/* ⚠️ `.articulo__acciones` ES EL ENVOLTORIO DE LA FILA DE ARRIBA, y hace falta
+   aunque sus dos hijos —`.volver` y `.descarga`— ya esten en esta lista. Sin el,
+   la fila se queda sin contenido pero CONSERVA su `margin-bottom: 24px`, que es
+   un hueco de la nada justo antes del titulo en la primera pagina del PDF.
+
+   `.volver` y `.descarga` se quedan igualmente: el primero porque lo necesita
+   `.volver--cierre`, al final del articulo y fuera de esta fila, y el segundo
+   para que esta lista siga diciendo de un vistazo QUE desaparece. */
+
+/* ⚠️ `.comentarios` TAPA LA SECCION ENTERA, Y HAY QUE DEJARLO ASI. Un PDF con
+   los comentarios del dia que se descargo seria un documento que envejece solo,
+   y ademas Artalk no llega a montar en el PDF —pdf.mjs no espera a que cargue—
+   asi que lo unico que saldria es el titulo sobre un hueco vacio.
+
+   Ocultar la seccion y no solo `.comentarios__caja` es lo que se lleva tambien
+   el <h2>, la nota de privacidad y el <noscript>. */
+
+/* La foto del articulo NO se pierde: sube a la portada, que la pinta a sangre.
+   Dejarla tambien aqui la repetiria en la pagina siguiente. */
+
+.articulo__portada {
+  display: none !important;
+}
+
+/* El titular, la categoria y la ficha de autoria tampoco se pierden: son
+   justamente el contenido de la portada. */
+
+.articulo__principal > .etiqueta--plana,
+.articulo__titular,
+.articulo__ficha {
+  display: none !important;
+}
+
+/* ------------------------------------------------- lienzo --------------- */
+
+html,
+body {
+  background: #fff;
+  margin: 0;
+  padding: 0;
+}
+
+/* ⚠️ ESTE RESET NO BASTA, Y HAY QUE DEJARLO DECLARADO APARTE.
+
+   `body:has(.progreso)` reserva en styles.css los 30px de la banda de progreso,
+   y pesa (0,1,1) frente a los (0,0,1) de `html, body`: gana por especificidad,
+   no por orden, asi que ponerlo despues en este archivo no lo desactiva.
+
+   No era un detalle. Con esos 30px la portada empezaba 30px mas abajo y su
+   ultimo bloque —la foto— terminaba pasada la caja de la pagina. Una imagen es
+   un bloque INDIVISIBLE: al no caber no se parte, se va ENTERA a la pagina
+   siguiente. El PDF salia con una portada sin foto y una segunda pagina con la
+   foto sola, y nada daba error.
+
+   Comprobado que el reset lo arregla: la foto vuelve a la pagina 1. */
+
+body:has(.progreso) {
+  padding-top: 0;
+}
+
+body {
+  font-family: var(--texto);
+  font-size: 10.5pt;
+  line-height: 1.55;
+  color: #1e1e1e;
+}
+
+/* La retícula de la web sobra: en papel el ancho lo fija el margen de la
+   pagina, no un contenedor. Si se dejara, el articulo saldria centrado dentro
+   de un area que ya esta centrada, con el doble de aire a los lados. */
+
+.contenedor,
+.contenedor--amplio,
+.articulo__disposicion,
+.articulo__principal,
+.articulo {
+  display: block;
+  max-width: none;
+  width: auto;
+  margin: 0;
+  padding: 0;
+}
+
+/* --------------------------------------- bloque de titulo --------------- */
+
+/* Lo inyecta pdf.mjs. Es la unica pieza del PDF que no existe en la web, y por
+   eso es la unica que se dibuja entera aqui.
+
+   ⚠️ ERA UNA PORTADA DE PAGINA ENTERA. Tenia `height: 259mm` —297 menos los
+   margenes— y `break-after: page`, con la foto cerrando abajo y un
+   `overflow: hidden` de red. Hoy es un bloque que ABRE la primera pagina y
+   fluye con el texto, formato paper.
+
+   Con ello desaparecen tres cosas: la calibracion de 259mm, el riesgo de
+   pagina en blanco por pasarse de esa altura, y la foto. */
+
+.pdf-portada {
+  display: none;
+}
+
+@media print {
+  .pdf-portada {
+    display: block;
+    /* Que no se parta entre el titular y la ficha: es el encabezado del
+       documento y se lee como una unidad. Cabe de sobra en una pagina. */
+    break-inside: avoid;
+    margin: 0 0 24pt;
+  }
+}
+
+/* Logo pequeno, como cintillo: en la portada de pagina entera pedia presencia y
+   aqui solo tiene que identificar la cabecera del documento. */
+
+.pdf-portada__logo {
+  width: 20pt;
+  height: 18pt;
+  vertical-align: -4pt;
+  margin-right: 6pt;
+}
+
+.pdf-portada__marca {
+  display: inline-block;
+  margin: 0 0 20pt;
+  font-family: var(--display);
+  font-size: 13pt;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #1e1e1e;
+}
+
+/* ⚠️ LLEVABA `margin-top: auto` para empujarse al centro de la pagina entera.
+   Sin portada no hay hueco que repartir, asi que se suelta. */
+
+.pdf-portada__texto {
+  margin-top: 0;
+}
+
+.pdf-portada__categoria {
+  margin: 0 0 14pt;
+  font-family: var(--ui);
+  font-size: 8.5pt;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #2f6e68;
+}
+
+.pdf-portada__titulo {
+  margin: 0;
+  font-family: var(--display);
+  font-size: 22pt;
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+  color: #1e1e1e;
+}
+
+/* El filete separa la ficha del texto. Va arriba de la ficha y no abajo de la
+   entradilla para que el hueco no dependa de si hay entradilla. */
+
+.pdf-portada__ficha {
+  margin-top: 18pt;
+  padding-top: 12pt;
+  border-top: 1px solid #e5e1da;
+  font-family: var(--ui);
+  font-size: 9pt;
+  letter-spacing: 0.04em;
+  color: #66615b;
+}
+
+.pdf-portada__ficha strong {
+  display: block;
+  margin-bottom: 3pt;
+  font-size: 10pt;
+  font-weight: 600;
+  letter-spacing: 0;
+  color: #1e1e1e;
+}
+
+.pdf-portada__sep {
+  margin: 0 7pt;
+  color: #d8d2c9;
+}
+
+/* --------------------------------------------- resumen ------------------ */
+
+/* ⚠️ LA ENTRADILLA DEL CUERPO HACE DE RESUMEN, Y ES LA UNICA VEZ QUE APARECE.
+
+   Antes el texto de apertura salia DOS VECES: la `descripcion` en la portada y
+   la `entradilla` aqui. Eran parrafos distintos con el mismo papel, y en un
+   paper eso es un resumen duplicado. Hoy la portada no lleva ninguno y este se
+   queda solo, que ademas evita tener que resolver las llamadas de referencia
+   —{{ref:n}}— en pdf.mjs: este parrafo ya viene resuelto del build.
+
+   En CURSIVA y con sangria a los DOS lados, sin recuadro: es la convencion del
+   abstract academico y no estrena ningun color ni filete. La sangria simetrica
+   es lo que lo separa del cuerpo; un recuadro habria pedido un fondo que el PDF
+   no usa en ninguna otra parte.
+
+   El rotulo va en ::before y no en el marcado porque es decorativo y porque el
+   <p> lo escribe el build para la WEB, donde no hay ningun «Resumen». */
+
+.entradilla {
+  font-family: var(--texto);
+  font-size: 11pt;
+  font-style: italic;
+  line-height: 1.5;
+  color: #66615b;
+  margin: 0 0 22pt;
+  padding: 0 14mm;
+}
+
+.entradilla::before {
+  content: "Resumen";
+  display: block;
+  margin-bottom: 5pt;
+  font-family: var(--ui);
+  font-size: 7.5pt;
+  font-style: normal;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #2f6e68;
+}
+
+/* ------------------------------------------------- indice --------------- */
+
+/* Entero en una pagina o entero en la siguiente: un indice partido por la
+   mitad es peor que un indice que empieza mas abajo. Con cinco apartados esto
+   nunca se dispara; con veinte, si. */
+
+.indice {
+  break-inside: avoid;
+  background: #f6f5f7;
+  border: 1px solid #e5e1da;
+  border-radius: 3pt;
+  padding: 14pt 16pt;
+  margin: 0 0 22pt;
+}
+
+.indice h2 {
+  margin: 0 0 8pt;
+  font-family: var(--ui);
+  font-size: 8.5pt;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #2f6e68;
+}
+
+.articulo .indice li {
+  padding: 6pt 0;
+  font-size: 10pt;
+}
+
+/* En papel los enlaces del indice no llevan a ninguna parte visible, asi que
+   pierden el color de enlace y se quedan en tinta. El numero conserva el
+   acento porque sigue haciendo de referencia cruzada con el epigrafe. */
+
+.indice a {
+  color: #1e1e1e;
+  text-decoration: none;
+}
+
+/* ------------------------------------------------- cuerpo --------------- */
+
+/* Un epigrafe nunca se queda solo al pie de una pagina: `break-after: avoid`
+   lo arrastra con lo que viene detras. Es el defecto que mas delata un PDF
+   generado sin cuidado. */
+
+.articulo__cuerpo h2 {
+  break-after: avoid;
+  break-inside: avoid;
+  margin: 22pt 0 10pt;
+  font-family: var(--texto);
+  font-size: 15pt;
+  font-weight: 600;
+  line-height: 1.25;
+  color: #1e1e1e;
+}
+
+.articulo__cuerpo h2::before {
+  color: #2f6e68;
+}
+
+.articulo__cuerpo h3 {
+  break-after: avoid;
+  break-inside: avoid;
+  margin: 16pt 0 7pt;
+  font-family: var(--texto);
+  font-size: 12pt;
+  font-weight: 600;
+  color: #1e1e1e;
+}
+
+/* El primer epigrafe no necesita separarse de nada: viene detras de la caja
+   del indice, que ya trae su propio hueco. */
+
+.articulo__cuerpo h2:first-child {
+  margin-top: 0;
+}
+
+/* Dos lineas sueltas es el minimo para que un salto no deje una linea colgando
+   ni se lleve una sola al empezar la pagina. Tres seria mas elegante y produce
+   paginas mas cortas; con parrafos de este largo, dos ya resuelve. */
+
+.articulo__cuerpo p {
+  margin: 0 0 10pt;
+  orphans: 2;
+  widows: 2;
+  text-align: justify;
+  hyphens: auto;
+}
+
+.articulo__cuerpo ul,
+.articulo__cuerpo ol {
+  margin: 0 0 12pt;
+}
+
+.articulo li {
+  margin-bottom: 5pt;
+  orphans: 2;
+  widows: 2;
+}
+
+/* La cita destacada entera o nada: partida pierde la comilla de apertura, que
+   es lo unico que la identifica como cita. */
+
+.articulo .cita--destacada {
+  break-inside: avoid;
+  margin: 18pt 0;
+  padding-left: 26pt;
+  font-size: 14pt;
+  line-height: 1.3;
+}
+
+.articulo .cita--destacada::before {
+  font-size: 30pt;
+}
+
+/* ⚠️ EL EXTRACTO SI SE PUEDE PARTIR, Y ES LO CONTRARIO QUE LA DESTACADA.
+
+   Arriba el `break-inside: avoid` tiene sentido: una destacada son dos o tres
+   lineas y partirla le quita la comilla, que es lo unico que la identifica. Un
+   extracto de 579 palabras ocupa VARIAS PAGINAS, asi que prohibirle el salto lo
+   empujaria entero a la siguiente y dejaria media pagina en blanco antes —el
+   mismo fallo que ya razona la caja de referencias unas lineas mas abajo—.
+
+   Lo que si se protege es cada linea: `orphans`/`widows` a 2, como los parrafos
+   del cuerpo, para que un salto no deje una linea colgando.
+
+   El cuerpo del articulo en papel es 11pt y el extracto va a 10pt: «algo menor»,
+   igual que en pantalla. El filete lateral y el color se heredan de styles.css.
+
+   Se queda SIN justificar a proposito, al reves que los parrafos del cuerpo:
+   justificar una columna ya estrechada por la sangria abre calles. */
+
+.articulo .cita--extracto {
+  margin: 12pt 0;
+  padding-left: 14pt;
+  font-size: 10pt;
+  line-height: 1.5;
+  orphans: 2;
+  widows: 2;
+}
+
+/* La fuente no se separa de su cita: `break-before: avoid` la mantiene pegada
+   aunque la cita acabe justo al final de la pagina. */
+
+.articulo .cita__fuente {
+  break-before: avoid;
+  margin: -10pt 0 18pt;
+  padding-left: 26pt;
+  font-size: 9pt;
+}
+
+/* Alineada con su extracto, igual que en pantalla: los 26pt de arriba son los
+   que deja la comilla, y un extracto no la tiene. Mismo prefijo `.articulo` por
+   el mismo motivo: sin el empataria con la regla de arriba y decidiria el orden
+   del archivo. */
+
+.articulo .cita--extracto + .cita__fuente {
+  margin: -6pt 0 12pt;
+  padding-left: 14pt;
+}
+
+/* ------------------------------------------------- llamadas ------------- */
+
+/* En papel siguen siendo utiles —dicen a que referencia acudir— pero ya no son
+   enlaces, asi que pierden el subrayado y se quedan en acento. */
+
+.llamada,
+.llamada a {
+  color: #2f6e68;
+  text-decoration: none;
+}
+
+/* ------------------------------------------------- referencias ---------- */
+
+/* La caja NO lleva `break-inside: avoid`: con once referencias no cabria en
+   ninguna pagina y Chromium la empujaria entera a la ultima, dejando media
+   pagina en blanco antes. Lo que si se protege es cada referencia por separado,
+   que es donde el corte se ve mal. */
+
+.referencias {
+  background: #f6f5f7;
+  border: 1px solid #e5e1da;
+  border-radius: 3pt;
+  padding: 14pt 16pt;
+  margin: 22pt 0;
+  font-size: 9pt;
+}
+
+.referencias h2 {
+  break-after: avoid;
+  margin: 0 0 4pt;
+  font-family: var(--ui);
+  font-size: 8.5pt;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #2f6e68;
+}
+
+.referencias .referencias__grupo {
+  break-after: avoid;
+  margin: 12pt 0 6pt;
+  font-size: 8pt;
+}
+
+.referencias li {
+  break-inside: avoid;
+  margin-bottom: 5pt;
+}
+
+/* El realce de `:target` es para la pantalla: en papel no hay salto que marcar
+   y saldria un recuadro gris sin motivo. */
+
+.referencias li[id]:target {
+  background: none;
+  box-shadow: none;
+}
+
+/* ------------------------------------------------- aviso final ---------- */
+
+/* Cierra el documento, entero y en su pagina o en la que toque, pero nunca
+   partido: es un texto legal de tres frases y cortarlo por la mitad lo deja
+   diciendo algo distinto en cada pagina. */
+
+.aviso {
+  break-inside: avoid;
+  margin-top: 22pt;
+  padding-top: 12pt;
+  border-top: 1px solid #e5e1da;
+  font-size: 9pt;
+  line-height: 1.5;
+  color: #66615b;
+}
+
+.aviso a {
+  color: #66615b;
+  text-decoration: none;
+}
+
+/* ------------------------------------------------- enlaces -------------- */
+
+/* Sin subrayado ni color: en papel un enlace no se puede pulsar, y pintarlo
+   como si se pudiera es una promesa que el documento no cumple. El unico sitio
+   donde la direccion importa es el pie, que la escribe entera.
+
+   ⚠️ No se usa el truco de `a::after { content: " (" attr(href) ")" }`. Aqui
+   casi todos los enlaces son internos y relativos, asi que imprimiria cosas
+   como «(../../contacto/)», que no sirven para nada. */
+
+.articulo a {
+  color: inherit;
+  text-decoration: none;
+}
