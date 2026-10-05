@@ -1295,6 +1295,20 @@ body:has(.portada--video) .cabecera--con-linea {
   .mancheta {
     background-image: none;
   }
+
+  /* ⚠️ EL CRÉDITO DE DUOWAVE SE OCULTA AL IMPRIMIR, Y VA AQUÍ Y NO EN
+     `imprimir.css`. Esa hoja la cargan SOLO las páginas de artículo, para el
+     PDF; `styles.css` la cargan todas, así que esta es la única regla que
+     alcanza también a imprimir `sobre/`, `contacto/` o `privacidad/` desde el
+     navegador.
+
+     En el PDF del artículo ya estaba cubierto por otro lado —`imprimir.css`
+     oculta `.pie` entero— así que esto no cambia nada allí. No es redundante:
+     son dos supuestos distintos y solo uno de los dos tenía regla. */
+
+  .pie__credito {
+    display: none !important;
+  }
 }
 
 .mancheta h1 {
@@ -6095,6 +6109,63 @@ body:has(.progreso) .cabecera {
 .pie a:hover {
   color: #fff;
   text-decoration: none;
+}
+
+/* ---- El crédito de autoría -------------------------------------------- */
+
+/* «Desarrollado por DuoWave», lo último del pie y lo más callado de la página.
+
+   Baja de los 13 px del pie a 12 y del 0,65 de blanco al 0,45, así que queda
+   por debajo del aviso legal que tiene encima: es un crédito, no una pieza de
+   navegación, y no debe competir con nada.
+
+   ⚠️ EL ENLACE TIENE QUE SER NORMAL, y aquí se juntan tres decisiones que son
+   de posicionamiento y no de diseño:
+
+     · SIN `rel="nofollow"`. Es un crédito honesto de quien ha hecho el sitio,
+       no un enlace pagado ni un intercambio.
+     · SIN `target="_blank"`. No hay motivo para sacar al lector de la página
+       en una ventana nueva, y además obligaría a `rel="noopener"`.
+     · EL TEXTO ES LA MARCA, «DuoWave», y nunca palabras clave. Un ancla del
+       tipo «diseño web en Madrid» en el pie de todas las páginas es exactamente
+       el patrón que los buscadores penalizan, y de paso empeora la página.
+
+   ⚠️ Y HAY QUE DEJAR SOLO «DuoWave» DENTRO DEL <a>, no la frase entera: si se
+   enlaza «Desarrollado por DuoWave» completo, el texto del ancla pasa a ser esa
+   frase.
+
+   ⚠️ EL 0,55 ES UN SUELO DE CONTRASTE, NO UN VALOR ELEGIDO A OJO. Estuvo en
+   0,45, que es lo que pedía el encargo —«que no destaque»— y **no llega a AA**:
+   medido sobre el `--pie` #242424 da **4,32:1**, por debajo del 4,5 que exige
+   un texto normal de 12 px. Con 0,55 sube a **5,65:1**.
+
+   Lo importante es que el objetivo se cumple igual: el aviso legal que tiene
+   encima va al 0,65 —7,32:1— así que el crédito **sigue siendo lo más apagado
+   del pie**, solo que ya legible. Si alguien quiere bajarlo más, que mida
+   antes: por debajo de 0,5 se sale de AA.
+
+   | Opacidad | Contraste |
+   |---|---|
+   | 0,45 | 4,32 ✗ |
+   | 0,50 | 4,99 |
+   | **0,55** | **5,65** |
+   | 0,65 (el aviso legal) | 7,32 | */
+
+.pie__credito {
+  margin-top: 14px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* Prefijada para ganar al `.pie a`, que es (0,1,1) igual que esta —(0,2,0) con
+   las dos clases— y le pondría el 0,8 general. */
+
+.pie .pie__credito a {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.pie .pie__credito a:hover {
+  color: #fff;
 }
 
 /* No hay regla @media (prefers-reduced-motion) para el video, y es a proposito:
