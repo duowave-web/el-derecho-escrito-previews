@@ -1,0 +1,6 @@
+# Cloudflare Pages — redirecciones 301 desde la estructura antigua
+/index.html                                   /                                              301
+/articulos.html                               /articulos/                                    301
+/sobre.html                                   /sobre/                                        301
+/contacto.html                                /contacto/                                     301
+/articulos/principio-de-legalidad-penal.html  /articulos/principio-de-legalidad-penal/       301
