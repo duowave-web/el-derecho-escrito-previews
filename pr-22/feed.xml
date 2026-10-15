@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>El Derecho Escrito</title>
+    <link>https://elderechoescrito.es/</link>
+    <description>Análisis de Derecho administrativo, urbanismo y jurisdicción contencioso-administrativa: conceptos, normativa, jurisprudencia y práctica procesal.</description>
+    <language>es-ES</language>
+    <atom:link href="https://elderechoescrito.es/feed.xml" rel="self" type="application/rss+xml"/>
+    <lastBuildDate>Thu, 20 Aug 2026 09:00:00 +0200</lastBuildDate>
+
+    <!-- GENERADO:articulos inicio -->
+    <item>
+      <title>La falta de MASC como requisito de procedibilidad: entre la inadmisión y la subsanación</title>
+      <link>https://elderechoescrito.es/articulos/masc-requisito-procedibilidad/</link>
+      <guid isPermaLink="true">https://elderechoescrito.es/articulos/masc-requisito-procedibilidad/</guid>
+      <pubDate>Mon, 28 Sep 2026 09:00:00 +0200</pubDate>
+      <category>Jurisprudencia</category>
+      <description>Analiza la subsanabilidad del requisito de MASC tras la LO 1/2025: incumplimiento material, defectos de acreditación y acceso a la jurisdicción.</description>
+    </item>
+    <!-- GENERADO:articulos fin -->
+
+  </channel>
+</rss>
