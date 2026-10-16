@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Página no encontrada | El Derecho Escrito</title>
+<meta name="description" content="La página que buscas no existe o ha cambiado de dirección.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#2f6e68">
+<link rel="icon" href="/el-derecho-escrito/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/el-derecho-escrito/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="/el-derecho-escrito/favicon-16.png" sizes="16x16" type="image/png">
+<link rel="apple-touch-icon" href="/el-derecho-escrito/apple-touch-icon.png">
+<link rel="stylesheet" href="/el-derecho-escrito/css/styles.css">
+</head>
+<body>
+
+<a class="saltar" href="#contenido">Saltar al contenido</a>
+
+<header class="cabecera">
+  <div class="cabecera__interior">
+    <a class="marca" href="/el-derecho-escrito/">El Derecho Escrito</a>
+    <nav class="nav" aria-label="Navegación principal">
+      <a href="/el-derecho-escrito/articulos/">Artículos</a>
+      <a href="/el-derecho-escrito/sobre/">Acerca de</a>
+      <a href="/el-derecho-escrito/contacto/">Contacto</a>
+
+      <!-- Rutas absolutas con prefijo, como el resto de esta pagina: Pages la
+           sirve desde cualquier profundidad y una relativa se romperia. -->
+      <form class="busca" role="search" method="get" action="/el-derecho-escrito/articulos/">
+        <label class="oculto" for="busca-cabecera">Buscar artículos</label>
+        <input class="busca__campo" id="busca-cabecera" type="search" name="q"
+               placeholder="Buscar artículos…" autocomplete="off">
+        <a class="busca__lupa" href="/el-derecho-escrito/articulos/" aria-label="Buscar artículos">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="7"></circle>
+            <path d="m20 20-3.6-3.6"></path>
+          </svg>
+        </a>
+      </form>
+    </nav>
+  </div>
+</header>
+
+<main id="contenido">
+  <section class="portada">
+    <div class="contenedor">
+      <p class="portada__antetitulo">Error 404</p>
+      <h1>Esta página no existe</h1>
+      <p class="portada__entradilla">O nunca existió, o cambió de dirección. Desde aquí puedes volver al listado de artículos o escribirme si crees que hay un enlace roto.</p>
+      <div class="portada__acciones">
+        <a class="boton boton--principal" href="/el-derecho-escrito/articulos/">Ver los artículos</a>
+        <a class="boton" href="/el-derecho-escrito/">Ir al inicio</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="pie">
+  <div class="contenedor">
+    <nav class="pie__nav" aria-label="Navegación del pie">
+      <a href="/el-derecho-escrito/articulos/">Artículos</a>
+      <a href="/el-derecho-escrito/sobre/">Acerca de</a>
+      <a href="/el-derecho-escrito/contacto/">Contacto</a>
+      <a href="/el-derecho-escrito/privacidad/">Privacidad</a>
+      <a href="/el-derecho-escrito/feed.xml">RSS</a>
+    </nav>
+    <p>El Derecho Escrito &middot; &copy; <span id="anio">2026</span></p>
+    <!-- ⚠️ El 404 es el único pie SIN la línea de «Contenido divulgativo», así
+         que aquí el crédito va detrás del copyright y no detrás de aquella.
+         Y el enlace es externo, así que NO lleva el prefijo
+         /el-derecho-escrito/ que sí llevan los demás de esta página. -->
+    <p class="pie__credito">Desarrollado por <a href="https://duowave.es">DuoWave</a></p>
+  </div>
+</footer>
+
+<script src="/el-derecho-escrito/js/main.js" defer></script>
+</body>
+</html>
